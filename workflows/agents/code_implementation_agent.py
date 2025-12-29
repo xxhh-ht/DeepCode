@@ -30,6 +30,82 @@ from prompts.code_prompts import (
 )
 
 
+def safe_get_tool_result(result, key=None, default=None):
+    """
+    安全地从工具结果中提取数据，处理 CallToolResult 对象
+    
+    Args:
+        result: 工具返回结果（可能是 CallToolResult 对象、dict 或 str）
+        key: 要获取的键（可选）
+        default: 默认值（可选）
+    
+    Returns:
+        提取的数据或默认值
+    """
+    # 如果是字典，直接使用 get 方法
+    if isinstance(result, dict):
+        if key is None:
+            return result
+        return result.get(key, default)
+    
+    # 如果是字符串，尝试解析为 JSON
+    if isinstance(result, str):
+        try:
+            parsed = json.loads(result)
+            if isinstance(parsed, dict):
+                if key is None:
+                    return parsed
+                return parsed.get(key, default)
+        except (json.JSONDecodeError, TypeError):
+            pass
+        return result if key is None else default
+    
+    # 如果是对象，检查是否有 content 属性
+    if hasattr(result, "content"):
+        content = result.content
+        if isinstance(content, dict):
+            if key is None:
+                return content
+            return content.get(key, default)
+        elif isinstance(content, str):
+            try:
+                parsed = json.loads(content)
+                if isinstance(parsed, dict):
+                    if key is None:
+                        return parsed
+                    return parsed.get(key, default)
+            except (json.JSONDecodeError, TypeError):
+                pass
+            return content if key is None else default
+    
+    # 如果对象有指定的属性，直接返回属性值
+    if key is not None and hasattr(result, key):
+        return getattr(result, key)
+    
+    # 尝试将对象转换为字典（适用于 dataclass 或 Pydantic 模型）
+    if hasattr(result, "model_dump"):
+        try:
+            data = result.model_dump()
+            if isinstance(data, dict):
+                if key is None:
+                    return data
+                return data.get(key, default)
+        except Exception:
+            pass
+    elif hasattr(result, "dict"):
+        try:
+            data = result.dict()
+            if isinstance(data, dict):
+                if key is None:
+                    return data
+                return data.get(key, default)
+        except Exception:
+            pass
+    
+    # 如果以上都不适用，返回默认值或对象本身
+    return result if key is None else default
+
+
 class CodeImplementationAgent:
     """
     Code Implementation Agent for systematic file-by-file development
@@ -303,19 +379,13 @@ class CodeImplementationAgent:
                 )
 
                 # Parse the result to check if summary was found
-                import json
-
-                if isinstance(read_code_mem_result, str):
-                    try:
-                        result_data = json.loads(read_code_mem_result)
-                        # Check if any summaries were found in the results
-                        should_use_summary = (
-                            result_data.get("status")
-                            in ["all_summaries_found", "partial_summaries_found"]
-                            and result_data.get("summaries_found", 0) > 0
-                        )
-                    except json.JSONDecodeError:
-                        should_use_summary = False
+                result_data = safe_get_tool_result(read_code_mem_result)
+                if isinstance(result_data, dict):
+                    should_use_summary = (
+                        result_data.get("status")
+                        in ["all_summaries_found", "partial_summaries_found"]
+                        and result_data.get("summaries_found", 0) > 0
+                    )
             except Exception as e:
                 self.logger.debug(f"read_code_mem check failed for {file_path}: {e}")
                 should_use_summary = False
