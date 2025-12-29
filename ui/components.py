@@ -64,11 +64,11 @@ def display_header():
         <div class="cyber-header">
             <div class="brand-container">
                 <div class="brand-title">DEEPCODE</div>
-                <div class="brand-subtitle">Autonomous Research & Engineering Matrix</div>
+                <div class="brand-subtitle">自主研究与工程矩阵</div>
                     </div>
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>SYSTEM ONLINE</span>
+                <span>系统在线</span>
         </div>
     </div>
     """,
@@ -82,26 +82,26 @@ def display_features():
         {
             "icon": "feature_synthesis",
             "fallback": "🧬",
-            "title": "Neural Synthesis",
-            "desc": "Transform research papers directly into executable repositories via multi-agent LLM pipelines.",
+            "title": "神经合成",
+            "desc": "通过多智能体 LLM 流水线将研究论文直接转换为可执行代码库。",
         },
         {
             "icon": "feature_hyper",
             "fallback": "⚡",
-            "title": "Hyper-Speed Mode",
-            "desc": "Acceleration layer that parallelizes retrieval, planning, and implementation for fastest delivery.",
+            "title": "超速模式",
+            "desc": "加速层并行化检索、规划和实施，实现最快交付。",
         },
         {
             "icon": "feature_cognition",
             "fallback": "🧠",
-            "title": "Cognitive Context",
-            "desc": "Semantic memory graphs retain methodology, datasets, and evaluation strategy during reasoning.",
+            "title": "认知上下文",
+            "desc": "语义记忆图在推理过程中保留方法论、数据集和评估策略。",
         },
         {
             "icon": "feature_secure",
             "fallback": "🛡️",
-            "title": "Secure Sandbox(Coming Soon)",
-            "desc": "Isolated execution & validation environment keeps experiments safe and reproducible.",
+            "title": "安全沙箱（即将推出）",
+            "desc": "隔离执行和验证环境确保实验安全且可复现。",
         },
     ]
 
@@ -195,33 +195,33 @@ def enhanced_progress_display_component(
 
     if chat_mode:
         workflow_steps = [
-            {"title": "INIT", "subtitle": "Boot agents"},
-            {"title": "PLAN", "subtitle": "Analyze intent"},
-            {"title": "SETUP", "subtitle": "Workspace"},
-            {"title": "DRAFT", "subtitle": "Generate plan"},
-            {"title": "CODE", "subtitle": "Implement"},
+            {"title": "INIT", "subtitle": "启动智能体"},
+            {"title": "PLAN", "subtitle": "分析意图"},
+            {"title": "SETUP", "subtitle": "工作空间"},
+            {"title": "DRAFT", "subtitle": "生成计划"},
+            {"title": "CODE", "subtitle": "实施"},
         ]
     elif not enable_indexing:
         workflow_steps = [
-            {"title": "INIT", "subtitle": "Load systems"},
-            {"title": "ANALYZE", "subtitle": "Parse paper"},
-            {"title": "DOWNLOAD", "subtitle": "Collect refs"},
-            {"title": "PLAN", "subtitle": "Blueprint"},
-            {"title": "CODE", "subtitle": "Implement"},
+            {"title": "INIT", "subtitle": "加载系统"},
+            {"title": "ANALYZE", "subtitle": "解析论文"},
+            {"title": "DOWNLOAD", "subtitle": "收集引用"},
+            {"title": "PLAN", "subtitle": "蓝图"},
+            {"title": "CODE", "subtitle": "实施"},
         ]
     else:
         workflow_steps = [
-            {"title": "INIT", "subtitle": "Load systems"},
-            {"title": "ANALYZE", "subtitle": "Paper scan"},
-            {"title": "DOWNLOAD", "subtitle": "Docs & data"},
-            {"title": "PLAN", "subtitle": "Architect"},
-            {"title": "REF", "subtitle": "Key refs"},
-            {"title": "REPO", "subtitle": "GitHub sync"},
-            {"title": "INDEX", "subtitle": "Vectorize"},
-            {"title": "CODE", "subtitle": "Implementation"},
+            {"title": "INIT", "subtitle": "加载系统"},
+            {"title": "ANALYZE", "subtitle": "论文扫描"},
+            {"title": "DOWNLOAD", "subtitle": "文档和数据"},
+            {"title": "PLAN", "subtitle": "架构设计"},
+            {"title": "REF", "subtitle": "关键引用"},
+            {"title": "REPO", "subtitle": "GitHub 同步"},
+            {"title": "INDEX", "subtitle": "向量化"},
+            {"title": "CODE", "subtitle": "实施"},
         ]
 
-    st.markdown("### 🛰️ Workflow Monitor")
+    st.markdown("### 🛰️ 工作流监控")
     progress_bar = st.progress(0)
     status_text = st.empty()
 
@@ -271,10 +271,10 @@ def update_step_indicator(
 
 def chat_input_component(task_counter: int = 0) -> Optional[str]:
     """Render modern chat input for guided mode"""
-    st.markdown("### 💬 Neural Link Interface")
+    st.markdown("### 💬 神经链接口")
 
     user_input = st.chat_input(
-        placeholder="Input research directive or query...",
+        placeholder="输入研究指令或查询...",
         key=f"chat_input_{task_counter}",
     )
     return user_input
@@ -291,14 +291,14 @@ def _save_uploaded_pdf(uploaded_file) -> Optional[str]:
         )
         return str(temp_path)
     except Exception as exc:
-        st.error(f"Failed to save uploaded file: {exc}")
+        st.error(f"保存上传文件失败：{exc}")
         return None
 
 
 def input_method_selector(task_counter: int) -> Tuple[Optional[str], Optional[str]]:
     """Render the input method selection tabs with modern styling"""
 
-    tab1, tab2, tab3 = st.tabs(["📄 PDF UPLOAD", "🔗 URL LINK", "⚡ QUICK COMMAND"])
+    tab1, tab2, tab3 = st.tabs(["📄 PDF 上传", "🔗 URL 链接", "⚡ 快速命令"])
 
     input_source: Optional[str] = None
     input_type: Optional[str] = None
@@ -306,7 +306,7 @@ def input_method_selector(task_counter: int) -> Tuple[Optional[str], Optional[st
     with tab1:
         st.markdown('<div style="padding:1rem;"></div>', unsafe_allow_html=True)
         uploaded_file = st.file_uploader(
-            "Upload Research Paper (PDF)",
+            "上传研究论文 (PDF)",
             type="pdf",
             key=f"file_uploader_{task_counter}",
         )
@@ -320,7 +320,7 @@ def input_method_selector(task_counter: int) -> Tuple[Optional[str], Optional[st
     with tab2:
         st.markdown('<div style="padding:1rem;"></div>', unsafe_allow_html=True)
         url = st.text_input(
-            "ArXiv / GitHub Resource URL",
+            "ArXiv / GitHub 资源 URL",
             placeholder="https://arxiv.org/abs/...",
             key=f"url_input_{task_counter}",
         )
@@ -331,8 +331,8 @@ def input_method_selector(task_counter: int) -> Tuple[Optional[str], Optional[st
     with tab3:
         st.markdown('<div style="padding:1rem;"></div>', unsafe_allow_html=True)
         query = st.text_area(
-            "Code Specifications / Abstract",
-            placeholder="Describe the algorithm or system requirements...",
+            "代码规范 / 摘要",
+            placeholder="描述算法或系统要求...",
             height=150,
             key=f"text_input_{task_counter}",
         )
@@ -348,29 +348,29 @@ def results_display_component(result: Any, task_counter: int):
 
     status = result.get("status", "unknown")
     is_success = status == "success"
-    status_label = "Mission Complete" if is_success else "Execution Failed"
+    status_label = "任务完成" if is_success else "执行失败"
     status_color = "var(--success)" if is_success else "var(--error)"
     status_icon = icon_img("status_success" if is_success else "status_error", 56)
     if not status_icon:
         status_icon = "✅" if is_success else "⚠️"
     status_message = (
-        "Computation sequence completed successfully."
+        "计算序列成功完成。"
         if is_success
-        else result.get("error", "Unknown error occurred during processing.")
+        else result.get("error", "处理过程中发生未知错误。")
     )
 
     st.markdown('<div style="height: 2rem;"></div>', unsafe_allow_html=True)
-    st.markdown("### 🚀 Operation Result")
+    st.markdown("### 🚀 操作结果")
 
     with st.container():
         if is_success:
-            st.success("Workflow completed across all stages ✅")
+            st.success("工作流在所有阶段完成 ✅")
         else:
-            st.error("Workflow interrupted. Check the logs below ⚠️")
+            st.error("工作流中断。请检查下方日志 ⚠️")
 
         col1, col2 = st.columns([2, 1])
         with col1:
-            with st.expander("📜 Execution Logs & Metadata", expanded=True):
+            with st.expander("📜 执行日志和元数据", expanded=True):
                 st.json(result)
 
         with col2:
@@ -385,7 +385,7 @@ def results_display_component(result: Any, task_counter: int):
                 unsafe_allow_html=True,
             )
             st.download_button(
-                label="📥 DOWNLOAD ARTIFACTS" if is_success else "📥 DOWNLOAD LOGS",
+                label="📥 下载产物" if is_success else "📥 下载日志",
                 data=str(result),
                 file_name=f"deepcode_result_{task_counter}.json",
                 mime="application/json",
@@ -395,34 +395,34 @@ def results_display_component(result: Any, task_counter: int):
 
 def system_status_component():
     """System status check component"""
-    st.markdown("### 🔧 System Diagnostics")
+    st.markdown("### 🔧 系统诊断")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("#### 📊 Core Metrics")
+        st.markdown("#### 📊 核心指标")
         st.info(f"**Python:** {sys.version.split()[0]}")
-        st.info(f"**Platform:** {sys.platform}")
+        st.info(f"**平台:** {sys.platform}")
 
     with col2:
-        st.markdown("#### ⚙️ Runtime Status")
+        st.markdown("#### ⚙️ 运行时状态")
         try:
             import asyncio
 
             loop = asyncio.get_event_loop()
             if loop.is_running():
-                st.success("Event Loop: ACTIVE")
+                st.success("事件循环：活跃")
             else:
-                st.warning("Event Loop: STANDBY")
+                st.warning("事件循环：待机")
         except Exception:
-            st.info("Event Loop: MANAGED")
+            st.info("事件循环：托管")
 
 
 def error_troubleshooting_component():
     """Error troubleshooting component"""
-    with st.expander("🛠️ Diagnostics & Troubleshooting", expanded=False):
+    with st.expander("🛠️ 诊断和故障排除", expanded=False):
         st.warning(
-            "If you encounter issues, please check your API keys in the sidebar."
+            "如果遇到问题，请检查侧边栏中的 API 密钥。"
         )
 
 
@@ -431,7 +431,7 @@ def footer_component():
     st.markdown(
         """
         <div style="text-align: center; margin-top: 6rem; padding: 2rem; color: rgba(255,255,255,0.2); font-family: var(--font-code); font-size: 0.7rem; border-top: 1px solid rgba(255,255,255,0.05);">
-            DEEPCODE_SYSTEMS // <span style="color: var(--primary);">OPERATIONAL</span> // VERSION 3.0.1
+            DEEPCODE_SYSTEMS // <span style="color: var(--primary);">运行中</span> // VERSION 3.0.1
     </div>
     """,
         unsafe_allow_html=True,
@@ -440,14 +440,14 @@ def footer_component():
 
 def render_sidebar_feed(max_items: int = 12):
     """Render live mission feed inside sidebar."""
-    st.markdown("#### 📡 Mission Feed")
+    st.markdown("#### 📡 任务信息流")
     events = list(st.session_state.get("sidebar_events", []))
 
     col1, col2 = st.columns([1, 1])
     with col1:
-        st.caption("Real-time agent telemetry")
+        st.caption("实时智能体遥测")
     with col2:
-        if st.button("Clear Feed", key="sidebar_clear_feed"):
+        if st.button("清除信息流", key="sidebar_clear_feed"):
             st.session_state.sidebar_events = []
             events = []
             st.session_state.sidebar_feed_last_cleared = datetime.utcnow().strftime(
@@ -455,7 +455,7 @@ def render_sidebar_feed(max_items: int = 12):
             )
 
     if not events:
-        st.caption("Awaiting activity...")
+        st.caption("等待活动...")
         return
 
     recent_events = list(reversed(events[-max_items:]))
@@ -480,13 +480,13 @@ def render_sidebar_feed(max_items: int = 12):
         )
 
         if isinstance(extra, dict) and extra:
-            with st.expander("Details", expanded=False):
+            with st.expander("详细信息", expanded=False):
                 st.json(extra)
 
 
 def render_system_monitor():
     """Display current backend + command telemetry."""
-    st.markdown("#### 🧬 System Monitor")
+    st.markdown("#### 🧬 系统监控")
     processing = st.session_state.get("processing", False)
     mode = st.session_state.get("requirement_analysis_mode", "direct").upper()
     indexing_enabled = st.session_state.get("enable_indexing", True)
@@ -501,21 +501,21 @@ def render_system_monitor():
     last_progress = (
         latest_event.get("extra", {}).get("progress") if latest_event else None
     )
-    state_label = "ACTIVE" if processing else "IDLE"
+    state_label = "活跃" if processing else "空闲"
 
     st.markdown(
         f"""
         <div class="system-monitor-card">
             <div class="status-grid">
-                <div class="status-chip"><span>STATE</span><span>{state_label}</span></div>
-                <div class="status-chip"><span>MODE</span><span>{mode}</span></div>
-                <div class="status-chip"><span>INDEXING</span><span>{"ON" if indexing_enabled else "OFF"}</span></div>
-                <div class="status-chip"><span>TASKS</span><span>{task_counter}</span></div>
+                <div class="status-chip"><span>状态</span><span>{state_label}</span></div>
+                <div class="status-chip"><span>模式</span><span>{mode}</span></div>
+                <div class="status-chip"><span>索引</span><span>{"开启" if indexing_enabled else "关闭"}</span></div>
+                <div class="status-chip"><span>任务</span><span>{task_counter}</span></div>
             </div>
             <div class="latest-stage">
                 <strong>{last_stage if last_stage else "--"}</strong>
                 {"· " + str(last_progress) + "%" if last_progress is not None else ""}
-                <br/>{last_message or "Awaiting telemetry..."}
+                <br/>{last_message or "等待遥测数据..."}
             </div>
         </div>
         """,
@@ -523,15 +523,15 @@ def render_system_monitor():
     )
 
     if last_error:
-        st.warning(f"Last error: {last_error}")
+        st.warning(f"上次错误: {last_error}")
 
 
 def render_log_viewer(max_lines: int = 50):
     """Display live log stream for current mission in a scrollable container."""
-    st.markdown("#### 📁 Live Log Stream")
+    st.markdown("#### 📁 实时日志流")
     logs_dir = BASE_DIR / "logs"
     if not logs_dir.exists():
-        st.info("Logs directory not found.")
+        st.info("未找到日志目录。")
         return
 
     log_files = sorted(
@@ -540,7 +540,7 @@ def render_log_viewer(max_lines: int = 50):
         reverse=True,
     )
     if not log_files:
-        st.info("No log files available yet.")
+        st.info("暂无日志文件。")
         return
 
     start_ts = st.session_state.get("workflow_start_time")
@@ -568,7 +568,7 @@ def render_log_viewer(max_lines: int = 50):
             selected_path = log_files[0]
 
     if waiting_for_new_log:
-        st.caption("Waiting for current task log to be created...")
+        st.caption("等待当前任务日志创建...")
         return
 
     st.session_state.active_log_file = str(selected_path)
@@ -576,7 +576,7 @@ def render_log_viewer(max_lines: int = 50):
     try:
         content = selected_path.read_text(encoding="utf-8", errors="ignore")
     except Exception as exc:
-        st.error(f"Failed to read {selected_path.name}: {exc}")
+        st.error(f"读取 {selected_path.name} 失败: {exc}")
         return
 
     lines = content.splitlines()
@@ -585,10 +585,10 @@ def render_log_viewer(max_lines: int = 50):
     # Show file info
     processing = st.session_state.get("processing", False)
     status_icon = "🔄" if processing else "✅"
-    st.caption(f"{status_icon} {selected_path.name} | Last {len(tail_lines)} lines")
+    st.caption(f"{status_icon} {selected_path.name} | 最近 {len(tail_lines)} 行")
 
     if not tail_lines:
-        st.info("Log file is empty.")
+        st.info("日志文件为空。")
         return
 
     # Build log HTML with scrollable container
@@ -685,11 +685,11 @@ def requirement_mode_selector() -> str:
     """
     Render the requirement workflow mode selector.
     """
-    mode_labels = {"direct": "🚀 Direct Mode", "guided": "🧭 Guided Mode"}
+    mode_labels = {"direct": "🚀 直接模式", "guided": "🧭 引导模式"}
     current_mode = st.session_state.get("requirement_analysis_mode", "direct")
 
     selection = st.radio(
-        "Requirement Intake Mode",
+        "需求输入模式",
         options=list(mode_labels.keys()),
         index=0 if current_mode != "guided" else 1,
         horizontal=True,
@@ -712,7 +712,7 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
     Render the guided requirement analysis workflow.
     """
 
-    st.markdown("### 🧭 Guided Requirement Workflow")
+    st.markdown("### 🧭 引导式需求工作流")
 
     step = st.session_state.get("requirement_analysis_step", "input")
     st.session_state.setdefault(
@@ -723,21 +723,21 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
     )
 
     step_titles = {
-        "input": "Step 1 · Describe Requirements",
-        "questions": "Step 2 · Answer Guiding Questions",
-        "summary": "Step 3 · Review Requirement Document",
-        "editing": "Step 4 · Request Changes",
+        "input": "步骤 1 · 描述需求",
+        "questions": "步骤 2 · 回答引导问题",
+        "summary": "步骤 3 · 审查需求文档",
+        "editing": "步骤 4 · 请求更改",
     }
     st.caption(
-        f"Current Stage: {step_titles.get(step, 'Step 1 · Describe Requirements')}"
+        f"当前阶段: {step_titles.get(step, '步骤 1 · 描述需求')}"
     )
 
     confirmed_doc = st.session_state.get("confirmed_requirement_text")
 
     if step == "input":
-        st.markdown("#### 1 · Describe your project")
+        st.markdown("#### 1 · 描述您的项目")
         st.text_area(
-            "Describe the product scope, tech stack, performance targets, and constraints:",
+            "描述产品范围、技术栈、性能目标和约束条件:",
             key="guided_initial_requirement",
             height=180,
         )
@@ -745,9 +745,9 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
 
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Generate guiding questions", type="primary"):
+            if st.button("生成引导问题", type="primary"):
                 if not initial_text.strip():
-                    st.warning("Please enter your project requirements first.")
+                    st.warning("请先输入您的项目需求。")
                 else:
                     st.session_state.initial_requirement = initial_text.strip()
                     st.session_state.questions_generating = True
@@ -764,28 +764,28 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
                     st.rerun()
 
         with col2:
-            if st.button("Skip Q&A and use current spec", type="secondary"):
+            if st.button("跳过问答并使用当前规范", type="secondary"):
                 if not initial_text.strip():
-                    st.warning("Please enter your project requirements first.")
+                    st.warning("请先输入您的项目需求。")
                 else:
                     final_doc = initial_text.strip()
                     st.session_state.initial_requirement = final_doc
                     st.session_state.confirmed_requirement_text = final_doc
                     st.session_state.requirements_confirmed = True
                     st.success(
-                        "Current description locked as the requirement document. Implementation will proceed next."
+                        "当前描述已锁定为需求文档。接下来将开始实施。"
                     )
 
     elif step == "questions":
-        st.markdown("#### 2 · Answer guiding questions")
+        st.markdown("#### 2 · 回答引导问题")
         if st.session_state.get("questions_generating"):
-            st.info("LLM is crafting guiding questions. Please wait...")
+            st.info("LLM 正在生成引导问题，请稍候...")
 
         questions = st.session_state.get("generated_questions", [])
         question_ids: List[str] = []
 
         if not questions:
-            st.caption("Guiding questions will appear once generation is complete.")
+            st.caption("引导问题将在生成完成后显示。")
         else:
             for idx, question in enumerate(questions):
                 if isinstance(question, dict):
@@ -807,25 +807,25 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
                 question_ids.append(q_id)
 
                 st.markdown(
-                    f"**Q{idx + 1}. {q_text or 'Please answer this question'}**"
+                    f"**Q{idx + 1}. {q_text or '请回答此问题'}**"
                 )
                 meta_parts = [part for part in [category, importance] if part]
                 if meta_parts:
                     st.caption(" / ".join(meta_parts))
                 if hint:
-                    st.caption(f"Hint: {hint}")
+                    st.caption(f"提示: {hint}")
 
                 answer_key = f"guided_answer_{idx}"
                 if answer_key not in st.session_state:
                     default_answer = st.session_state.user_answers.get(q_id, "")
                     st.session_state[answer_key] = default_answer
 
-                st.text_area("Your answer", key=answer_key, height=100)
+                st.text_area("您的答案", key=answer_key, height=100)
 
         col1, col2, col3 = st.columns(3)
         with col1:
             if st.button(
-                "Generate requirement document", type="primary", disabled=not questions
+                "生成需求文档", type="primary", disabled=not questions
             ):
                 answers_payload = {}
                 for idx, q_id in enumerate(question_ids):
@@ -845,7 +845,7 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
 
         with col2:
             if st.button(
-                "Generate without answers", type="secondary", disabled=not questions
+                "不回答直接生成", type="secondary", disabled=not questions
             ):
                 st.session_state.user_answers = {}
                 st.session_state.requirements_generating = True
@@ -856,33 +856,33 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
                 st.rerun()
 
         with col3:
-            if st.button("Back to Step 1"):
+            if st.button("返回步骤 1"):
                 reset_guided_workflow_state(preserve_initial=True)
                 st.rerun()
 
     elif step == "summary":
-        st.markdown("#### 3 · AI-generated requirement document")
+        st.markdown("#### 3 · AI 生成的需求文档")
         if st.session_state.get("requirements_generating"):
-            st.info("Generating requirement document. Please wait...")
+            st.info("正在生成需求文档，请稍候...")
 
         summary = (st.session_state.get("detailed_requirements") or "").strip()
 
         if summary:
             st.markdown(summary)
             st.download_button(
-                "Download requirement document",
+                "下载需求文档",
                 summary,
                 file_name="deepcode_requirements.md",
                 mime="text/markdown",
                 use_container_width=True,
             )
         else:
-            st.caption("Waiting for requirement document to be generated...")
+            st.caption("等待需求文档生成...")
 
         col1, col2, col3 = st.columns(3)
         with col1:
             if st.button(
-                "Confirm and start implementation ✅",
+                "确认并开始实施 ✅",
                 type="primary",
                 disabled=not summary,
             ):
@@ -891,25 +891,25 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
                     st.session_state.confirmed_requirement_text = final_doc.strip()
                     st.session_state.requirements_confirmed = True
                     st.success(
-                        "Requirement document confirmed. Implementation pipeline will start next."
+                        "需求文档已确认。接下来将开始实施流程。"
                     )
                 else:
-                    st.warning("No requirement document available yet.")
+                    st.warning("暂无需求文档可用。")
 
         with col2:
-            if st.button("Request edits", type="secondary", disabled=not summary):
+            if st.button("请求编辑", type="secondary", disabled=not summary):
                 st.session_state.requirement_analysis_step = "editing"
                 st.session_state.guided_edit_feedback = ""
 
         with col3:
-            if st.button("Restart Q&A", type="secondary"):
+            if st.button("重新开始问答", type="secondary"):
                 reset_guided_workflow_state(preserve_initial=True)
                 st.rerun()
 
     elif step == "editing":
-        st.markdown("#### 4 · Modify requirement document")
+        st.markdown("#### 4 · 修改需求文档")
         st.text_area(
-            "Describe the changes or clarifications you need:",
+            "描述您需要的更改或澄清:",
             key="guided_edit_feedback",
             height=160,
         )
@@ -917,24 +917,24 @@ def guided_requirement_workflow() -> Tuple[Optional[str], bool]:
 
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Submit change request", type="primary"):
+            if st.button("提交更改请求", type="primary"):
                 if not feedback_value.strip():
-                    st.warning("Please describe the requested changes.")
+                    st.warning("请描述您请求的更改。")
                 else:
                     st.session_state.edit_feedback = feedback_value.strip()
                     st.session_state.requirements_editing = True
-                    st.info("Updating requirement document based on your feedback...")
+                    st.info("正在根据您的反馈更新需求文档...")
 
         with col2:
-            if st.button("Back to requirement document"):
+            if st.button("返回需求文档"):
                 st.session_state.requirement_analysis_step = "summary"
                 st.session_state.guided_edit_feedback = ""
 
         if st.session_state.get("requirements_editing"):
-            st.info("Requirement document is updating...")
+            st.info("需求文档正在更新...")
 
     if confirmed_doc:
-        st.success("Requirement document locked. You can start implementation anytime.")
+        st.success("需求文档已锁定。您可以随时开始实施。")
 
     return (confirmed_doc if confirmed_doc else None, bool(confirmed_doc))
 
@@ -945,8 +945,8 @@ def sidebar_control_panel():
         st.markdown(
             """
             <div style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                <h2 style="margin:0; color:white;">CONTROL DECK</h2>
-                <div style="font-family:var(--font-code); color:var(--primary); font-size:0.8rem;">// MISSION CONTROL</div>
+                <h2 style="margin:0; color:white;">控制面板</h2>
+                <div style="font-family:var(--font-code); color:var(--primary); font-size:0.8rem;">// 任务控制</div>
         </div>
         """,
             unsafe_allow_html=True,
@@ -957,7 +957,7 @@ def sidebar_control_panel():
         if workflow_start:
             render_log_viewer()
         else:
-            st.info("Awaiting next mission run to stream logs.")
+            st.info("等待下次任务运行以流式传输日志。")
     st.markdown(
         """
             <div style="font-size: 0.7rem; color: rgba(255,255,255,0.3); text-align: center; margin-top: 1rem;">

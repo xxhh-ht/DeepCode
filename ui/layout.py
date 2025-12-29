@@ -34,7 +34,7 @@ def setup_page_config():
         initial_sidebar_state="expanded",
         menu_items={
             "Get Help": "https://github.com/deepcode",
-            "About": "DeepCode AI Research Engine v3.0",
+            "About": "DeepCode AI 研究引擎 v3.0",
         },
     )
 
@@ -114,7 +114,7 @@ def render_input_area():
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 if st.button(
-                    "START CODING 🚀", type="primary", use_container_width=True
+                    "开始编码 🚀", type="primary", use_container_width=True
                 ):
                     if is_guided:
                         st.session_state.confirmed_requirement_text = None

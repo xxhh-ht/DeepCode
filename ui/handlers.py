@@ -239,11 +239,11 @@ def run_async_task(coro):
         result = future.result(timeout=300)  # 5 minute timeout
         return result
     except concurrent.futures.TimeoutError:
-        st.error("Processing timeout after 5 minutes. Please try again.")
+        st.error("处理超时（5分钟）。请重试。")
         raise TimeoutError("Processing timeout")
     except Exception as e:
         # If thread pool execution fails, try direct execution
-        st.warning(f"Threaded async execution failed: {e}, trying direct execution...")
+        st.warning(f"线程异步执行失败：{e}，尝试直接执行...")
         try:
             # Fallback method: run directly in current thread
             loop = None
@@ -263,7 +263,7 @@ def run_async_task(coro):
 
                 gc.collect()
         except Exception as backup_error:
-            st.error(f"All execution methods failed: {backup_error}")
+            st.error(f"所有执行方法失败：{backup_error}")
             raise backup_error
     finally:
         # Ensure thread pool is properly closed
@@ -335,7 +335,7 @@ def run_async_task_simple(coro):
                 )
                 raise TimeoutError("Processing timeout")
             except Exception as e:
-                st.error(f"Async processing error: {e}")
+                st.error(f"异步处理错误：{e}")
                 raise e
             finally:
                 # Ensure thread pool is properly closed
@@ -358,7 +358,7 @@ def run_async_task_simple(coro):
             result = loop.run_until_complete(coro)
             return result
         except Exception as backup_error:
-            st.error(f"All async methods failed: {backup_error}")
+            st.error(f"所有异步方法失败：{backup_error}")
             raise backup_error
         finally:
             if loop:
@@ -491,7 +491,7 @@ def handle_processing_workflow(
                 )
             )
         except Exception as e:
-            st.warning(f"Primary async method failed: {e}")
+            st.warning(f"主要异步方法失败：{e}")
             # Fallback method: use original thread pool method
             try:
                 result = run_async_task(
@@ -500,7 +500,7 @@ def handle_processing_workflow(
                     )
                 )
             except Exception as backup_error:
-                st.error(f"Both async methods failed. Error: {backup_error}")
+                st.error(f"两种异步方法都失败。错误：{backup_error}")
                 return {
                     "status": "error",
                     "error": str(backup_error),
@@ -760,11 +760,11 @@ def handle_guided_mode_processing():
                     st.session_state.generated_questions = questions
                 else:
                     st.error(
-                        f"Question generation failed: {result.get('error', 'Unknown error')}"
+                        f"问题生成失败：{result.get('error', '未知错误')}"
                     )
 
             except Exception as e:
-                st.error(f"Question generation exception: {str(e)}")
+                st.error(f"问题生成异常：{str(e)}")
 
     # Check if detailed requirements need to be generated
     if st.session_state.get("requirements_generating", False):
@@ -789,16 +789,16 @@ def handle_guided_mode_processing():
                     st.session_state.detailed_requirements = result["result"]
                 else:
                     st.error(
-                        f"Requirement summary generation failed: {result.get('error', 'Unknown error')}"
+                        f"需求摘要生成失败：{result.get('error', '未知错误')}"
                     )
 
             except Exception as e:
-                st.error(f"Requirement summary generation exception: {str(e)}")
+                st.error(f"需求摘要生成异常：{str(e)}")
 
     # Check if requirements need to be edited
     if st.session_state.get("requirements_editing", False):
         st.session_state.requirements_editing = False
-        st.info("🔧 Starting requirement modification process...")
+        st.info("🔧 开始需求修改流程...")
 
         # Asynchronously modify requirements based on user feedback
         current_requirements = st.session_state.get("detailed_requirements", "")
@@ -822,11 +822,11 @@ def handle_guided_mode_processing():
                     st.rerun()
                 else:
                     st.error(
-                        f"Requirements modification failed: {result.get('error', 'Unknown error')}"
+                        f"需求修改失败：{result.get('error', '未知错误')}"
                     )
 
             except Exception as e:
-                st.error(f"Requirements modification exception: {str(e)}")
+                st.error(f"需求修改异常：{str(e)}")
 
 
 def _background_workflow_runner(
@@ -913,16 +913,16 @@ def handle_start_processing_button(input_source: str, input_type: str):
 
         # Display result status
         if result["status"] == "success":
-            display_status("All operations completed successfully! 🎉", "success")
+            display_status("所有操作成功完成！🎉", "success")
         else:
-            display_status("Error during processing", "error")
+            display_status("处理过程中出错", "error")
 
         # Update session state
         update_session_state_with_result(result, input_type)
 
     except Exception as e:
         # Handle exceptional cases
-        st.error(f"Unexpected error during processing: {e}")
+        st.error(f"处理过程中发生意外错误：{e}")
         result = {"status": "error", "error": str(e)}
         update_session_state_with_result(result, input_type)
 
@@ -970,9 +970,9 @@ def check_background_workflow_status():
 
             # Display result status
             if result["status"] == "success":
-                display_status("All operations completed successfully! 🎉", "success")
+                display_status("所有操作成功完成！🎉", "success")
             else:
-                display_status("Error during processing", "error")
+                display_status("处理过程中出错", "error")
 
             # Update session state
             update_session_state_with_result(
@@ -980,7 +980,7 @@ def check_background_workflow_status():
             )
 
         elif workflow_result["status"] == "error":
-            st.error(f"Unexpected error during processing: {workflow_result['error']}")
+            st.error(f"处理过程中发生意外错误：{workflow_result['error']}")
             result = {"status": "error", "error": workflow_result["error"]}
             update_session_state_with_result(
                 result, st.session_state.get("workflow_input_type", "")
