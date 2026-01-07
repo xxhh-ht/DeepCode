@@ -37,6 +37,82 @@ from utils.llm_utils import get_preferred_llm_class, get_default_models
 # DialogueLogger removed - no longer needed
 
 
+def safe_get_tool_result(result, key=None, default=None):
+    """
+    安全地从工具结果中提取数据，处理 CallToolResult 对象
+    
+    Args:
+        result: 工具返回结果（可能是 CallToolResult 对象、dict 或 str）
+        key: 要获取的键（可选）
+        default: 默认值（可选）
+    
+    Returns:
+        提取的数据或默认值
+    """
+    # 如果是字典，直接使用 get 方法
+    if isinstance(result, dict):
+        if key is None:
+            return result
+        return result.get(key, default)
+    
+    # 如果是字符串，尝试解析为 JSON
+    if isinstance(result, str):
+        try:
+            parsed = json.loads(result)
+            if isinstance(parsed, dict):
+                if key is None:
+                    return parsed
+                return parsed.get(key, default)
+        except (json.JSONDecodeError, TypeError):
+            pass
+        return result if key is None else default
+    
+    # 如果是对象，检查是否有 content 属性
+    if hasattr(result, "content"):
+        content = result.content
+        if isinstance(content, dict):
+            if key is None:
+                return content
+            return content.get(key, default)
+        elif isinstance(content, str):
+            try:
+                parsed = json.loads(content)
+                if isinstance(parsed, dict):
+                    if key is None:
+                        return parsed
+                    return parsed.get(key, default)
+            except (json.JSONDecodeError, TypeError):
+                pass
+            return content if key is None else default
+    
+    # 如果对象有指定的属性，直接返回属性值
+    if key is not None and hasattr(result, key):
+        return getattr(result, key)
+    
+    # 尝试将对象转换为字典（适用于 dataclass 或 Pydantic 模型）
+    if hasattr(result, "model_dump"):
+        try:
+            data = result.model_dump()
+            if isinstance(data, dict):
+                if key is None:
+                    return data
+                return data.get(key, default)
+        except Exception:
+            pass
+    elif hasattr(result, "dict"):
+        try:
+            data = result.dict()
+            if isinstance(data, dict):
+                if key is None:
+                    return data
+                return data.get(key, default)
+        except Exception:
+            pass
+    
+    # 如果以上都不适用，返回默认值或对象本身
+    return result if key is None else default
+
+
 class CodeImplementationWorkflowWithIndex:
     """
     Paper Code Implementation Workflow Manager with Code Reference Indexer
@@ -1311,11 +1387,9 @@ Requirements:
                 history_result = await self.mcp_agent.call_tool(
                     "get_operation_history", {"last_n": 30}
                 )
-                history_data = (
-                    json.loads(history_result)
-                    if isinstance(history_result, str)
-                    else history_result
-                )
+                history_data = safe_get_tool_result(history_result)
+                if not isinstance(history_data, dict):
+                    history_data = {"total_operations": 0, "history": []}
             else:
                 history_data = {"total_operations": 0, "history": []}
 

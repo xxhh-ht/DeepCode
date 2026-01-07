@@ -400,43 +400,36 @@ class CodeImplementationAgent:
                 )
 
                 # Modify the result to indicate it was originally a read_file call
-                import json
-
-                try:
-                    result_data = (
-                        json.loads(result) if isinstance(result, str) else result
-                    )
-                    if isinstance(result_data, dict):
-                        # Extract the specific file result for the single file we requested
-                        file_results = result_data.get("results", [])
-                        if file_results and len(file_results) > 0:
-                            specific_result = file_results[
-                                0
-                            ]  # Get the first (and only) result
-                            # Transform to match the old single-file format for backward compatibility
-                            transformed_result = {
-                                "status": specific_result.get("status", "no_summary"),
-                                "file_path": specific_result.get(
-                                    "file_path", file_path
-                                ),
-                                "summary_content": specific_result.get(
-                                    "summary_content"
-                                ),
-                                "message": specific_result.get("message", ""),
-                                "original_tool": "read_file",
-                                "optimization": "redirected_to_read_code_mem",
-                            }
-                            final_result = json.dumps(
-                                transformed_result, ensure_ascii=False
-                            )
-                        else:
-                            # Fallback if no results
-                            result_data["original_tool"] = "read_file"
-                            result_data["optimization"] = "redirected_to_read_code_mem"
-                            final_result = json.dumps(result_data, ensure_ascii=False)
+                result_data = safe_get_tool_result(result)
+                if isinstance(result_data, dict):
+                    # Extract the specific file result for the single file we requested
+                    file_results = result_data.get("results", [])
+                    if file_results and len(file_results) > 0:
+                        specific_result = file_results[
+                            0
+                        ]  # Get the first (and only) result
+                        # Transform to match the old single-file format for backward compatibility
+                        transformed_result = {
+                            "status": specific_result.get("status", "no_summary"),
+                            "file_path": specific_result.get(
+                                "file_path", file_path
+                            ),
+                            "summary_content": specific_result.get(
+                                "summary_content"
+                            ),
+                            "message": specific_result.get("message", ""),
+                            "original_tool": "read_file",
+                            "optimization": "redirected_to_read_code_mem",
+                        }
+                        final_result = json.dumps(
+                            transformed_result, ensure_ascii=False
+                        )
                     else:
-                        final_result = result
-                except (json.JSONDecodeError, TypeError):
+                        # Fallback if no results
+                        result_data["original_tool"] = "read_file"
+                        result_data["optimization"] = "redirected_to_read_code_mem"
+                        final_result = json.dumps(result_data, ensure_ascii=False)
+                else:
                     final_result = result
 
                 return {
@@ -1014,13 +1007,9 @@ class CodeImplementationAgent:
                     )
 
                     # Parse the result to check if summary was found
-                    import json
+                    result_data = safe_get_tool_result(result)
 
-                    result_data = (
-                        json.loads(result) if isinstance(result, str) else result
-                    )
-
-                    if (
+                    if isinstance(result_data, dict) and (
                         result_data.get("status")
                         in ["all_summaries_found", "partial_summaries_found"]
                         and result_data.get("summaries_found", 0) > 0
@@ -1120,12 +1109,11 @@ class CodeImplementationAgent:
             )
 
             # Parse the result to check if summary was found
-            import json
-
-            result_data = json.loads(result) if isinstance(result, str) else result
+            result_data = safe_get_tool_result(result)
 
             return (
-                result_data.get("status")
+                isinstance(result_data, dict)
+                and result_data.get("status")
                 in ["all_summaries_found", "partial_summaries_found"]
                 and result_data.get("summaries_found", 0) > 0
             )
